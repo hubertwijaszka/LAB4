@@ -1,9 +1,13 @@
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class Main {
     List<CodePair> codePairs=new ArrayList<>();
     String korpus;
+    String decodeKorpus;
     List<BitSet> encodeKorpus;
 
     public static void main(String[] args) {
@@ -36,6 +40,19 @@ public class Main {
             encodeKorpus.add(findBitSet(c));
         }
     }
+    public void decode(){
+        decodeKorpus=new String();
+        for(BitSet bitSet:encodeKorpus){
+            decodeKorpus+=findChar(bitSet);
+        }
+    }
+
+    private String findChar(BitSet bitSet) {
+        for(CodePair codePair:codePairs){
+            if(codePair.bitSet.equals(bitSet)) return codePair.character.toString();
+        }
+        return null;
+    }
 
     private BitSet findBitSet(char c) {
         for(CodePair codePair:codePairs){
@@ -52,6 +69,12 @@ public class Main {
             break;
         }
         return bitset;
+}
+
+public void save(){
+    byte data[] =null;
+    Path file = Paths.get("encodeFile");
+    Files.write(file, codePairs.get(0).bitSet.toByteArray()); //do poprawy
 }
 
 }
